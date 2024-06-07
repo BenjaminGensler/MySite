@@ -1,24 +1,28 @@
 
 
 h2{
-    font-size: 30px;
+    font-size: 5vw;
     color: rgb(125, 59, 182);
     padding: 0px 40px 0px 40px;
     text-shadow: -2px 2px 0 black;
 }
 
 p{
-    font-size: 20px;
+    font-size: 3vw;
     color: white;
     padding: 0px 40px 0px 40px;
     text-shadow: -1px 1px 0 black;
 }
 
-ul{
+ul {
+    display: flex;
     text-align: right;
-    
+    justify-content: space-between; /* This will distribute the space between the li elements */
+    flex-wrap: wrap; /* This will allow the li elements to wrap to a new line if there isn't enough space */
 }
+
 li{
+    font-size: 2vw;
     display: inline;
     padding: 0px 4px 8px 4px;
     border-width: 0px 0px 4px 0px;
@@ -41,10 +45,13 @@ body{
 .intro{
     display: flex;
     margin-top: 60px;
+    align-items: center;
 }
 
 .left-side h1 {
-    font-size: 30px;
+    /*The font-size 'vw' allows you to set the font size 
+    in relation to the viewport width.*/
+    font-size: 5vw;
     color: rgb(125, 59, 182);
     padding: 0px 40px 0px 40px;
     text-shadow: -2px 2px 0 black;
@@ -56,8 +63,8 @@ body{
 
 .headshot{
     border-radius: 50%;
-    width: 200px;
-    height: 200px;
+    width: 30vw;
+    height: 30vw;
     border: 4px solid white;
     box-shadow: 0px 0px 10px black;
 }
@@ -70,21 +77,55 @@ body{
     color: #dda91b;
 }
 
+/* section {
+    transform-style: preserve-3d;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+} */
 
+/* The following code allows for me to properly fit picture(s) into a space This works along side multiple <img> items inside the associated <section class="parallax bg" */
+.parallax{
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
 
-.parallax {
-    background-repeat: no-repeat;
-    background-size: 100%;
-    padding: 0 0 0 0;
+.bg{
+    flex: 0 0 auto;
+    width: 100vw;
+}
+
+.bg img{
+    width: 100%;
+}
+
+.parallax::after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateZ(-1px) scale(1);
+    background-size: 100% 100%;
+    z-index: -1;
+}
+
+.parallax.bg{
+    position: relative;
+    z-index: 1;
+}
+
+.bg::after{
+    
 }
 
 .no-parallax{
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
     background-color: #1a1822;
     z-index: 999;
     padding: 20px 20px 20px 20px;
 }
 
-.bg::after{
-    /* background: url("top.jpg"); */
-    background-size: cover;
-}
