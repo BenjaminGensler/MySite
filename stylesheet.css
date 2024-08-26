@@ -1,131 +1,694 @@
+/* Universal CSS elements */
 
-
-h2{
-    font-size: 5vw;
-    color: rgb(125, 59, 182);
-    padding: 0px 40px 0px 40px;
-    text-shadow: -2px 2px 0 black;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(255, 255, 255);
 }
 
-p{
-    font-size: 3vw;
-    color: white;
-    padding: 0px 40px 0px 40px;
-    text-shadow: -1px 1px 0 black;
-}
-
-ul {
+.header {
+    padding-bottom: 40px;
+    /* Added padding for Header template layouts */
     display: flex;
-    text-align: right;
-    justify-content: space-between; /* This will distribute the space between the li elements */
-    flex-wrap: wrap; /* This will allow the li elements to wrap to a new line if there isn't enough space */
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
 }
 
-li{
-    font-size: 2vw;
-    display: inline;
-    padding: 0px 4px 8px 4px;
-    border-width: 0px 0px 4px 0px;
-    text-shadow: -1px 1px 0 black;
+.blog {
+    background-color: rgb(154, 196, 233);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
+
 }
 
-a {
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 6px 18px 5px 18px;
-    border-style: solid;
-    border-width: 0px 0px 4px 0px;
-}
- 
-body{
-    margin: 0px;
-    padding: 0px;
+.testimonial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
+
 }
 
-.intro{
+.pricing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
+
+}
+
+.intro {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    max-width: 1200px;
+}
+
+.intro2 {
     display: flex;
     margin-top: 60px;
     align-items: center;
+    justify-content: center;
+    align-self: center;
 }
 
-.left-side h1 {
-    /*The font-size 'vw' allows you to set the font size 
-    in relation to the viewport width.*/
-    font-size: 5vw;
-    color: rgb(125, 59, 182);
+li {
+    display: flex;
+    align-items: center;
+}
+
+li a {
+    padding: 10px 20px;
+    font-size: 30px;
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+.tablogo {
+    max-width: 50px;
+    padding-right: 10px;
+}
+
+h1 {
+    font-size: 70px;
+    color: rgb(0, 0, 0);
     padding: 0px 40px 0px 40px;
-    text-shadow: -2px 2px 0 black;
 }
 
-.left-side, .right-side {
-    flex: 1;
+h2 {
+    font-size: 2.0rem;
 }
 
-.headshot{
-    border-radius: 50%;
-    width: 30vw;
-    height: 30vw;
-    border: 4px solid white;
-    box-shadow: 0px 0px 10px black;
+h3 {
+    font-size: 1.5rem;
 }
 
+p {
+    font-size: 1.2rem;
+    /* or any other properties you want to apply */
+}
 
-.off{
+button {
+    background-color: rgb(67, 133, 187);
     color: white;
-}
-.off:hover {
-    color: #dda91b;
+    border: none;
+    /* Remove border */
+    outline: none;
+    /* Remove outline */
+    font-size: 20px;
+    height: 60px;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 20px 20px;
+    margin: 10px;
+    border-radius: 10px;
 }
 
-/* section {
-    transform-style: preserve-3d;
-    position: relative;
+button:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(67, 133, 187);
+}
+
+li a:hover {
+    background-color: rgb(67, 133, 187);
+    color: rgb(255, 255, 255);
+}
+
+
+/* header template 1 */
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    /* This will center the li elements */
+    list-style-type: none;
+    /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+img.logo {
+    max-width: 80%;
+    min-width: 200px;
+}
+
+
+.left-side,
+.right-side {
+    display: flex;
     justify-content: center;
     align-items: center;
-} */
+    flex-direction: column;
 
-/* The following code allows for me to properly fit picture(s) into a space This works along side multiple <img> items inside the associated <section class="parallax bg" */
-.parallax{
+}
+
+.mid {
+    background-color: black;
+    height: 60px;
+}
+
+
+.sectionaltype {
+    background-color: rgb(67, 133, 187);
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    min-width: 70px;
+}
+
+/* header Template 2 */
+/* ----------------------------------------------------------------------------------- */
+
+
+
+.tabs2 {
     display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
+    justify-content: left;
+    /* This will center the li elements */
+    list-style-type: none;
+    /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
-.bg{
-    flex: 0 0 auto;
-    width: 100vw;
+.left-side2 h1 {
+    font-size: 70px;
+    color: rgb(0, 0, 0);
+    padding: 0px 40px 0px 40px;
 }
 
-.bg img{
-    width: 100%;
+
+.left-side2 {
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
 }
 
-.parallax::after {
-    content: " ";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateZ(-1px) scale(1);
-    background-size: 100% 100%;
-    z-index: -1;
+/* header Template 3 */
+/* ----------------------------------------------------------------------------------- */
+
+
+.tabs3 {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    position: sticky;
+    padding: 0;
 }
 
-.parallax.bg{
+/* The below three take up the top part of the screen, splitting into sections 
+
+.leftli and rightli take up 1/4 each and are positioned in their respective corners
+.centerli takes up the middle section of 2/4 and is centered (else would be more left*/
+.leftli3 {
+    flex-grow: 0;
+}
+
+.centerli3 {
+    display: flex;
+    justify-content: left;
+    flex-grow: 2;
+}
+
+.rightli3 {
+    display: flex;
+    justify-content: right;
+    flex-grow: 1;
+    margin: 10px;
+}
+
+.tabbutton3 {
+    background-color: rgb(67, 133, 187);
+    color: white;
+    border: none;
+    /* Remove border */
+    outline: none;
+    /* Remove outline */
+    font-size: 10px;
+    height: 60px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 20px 20px;
+    margin: 0px;
+    border-radius: 10px;
+
+}
+
+.left-side3 h1 {
+    font-size: 70px;
+    color: rgb(0, 0, 0);
+    padding: 0px 40px 0px 40px;
+}
+
+
+.left-side3 {
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.headerbuttons3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+}
+
+img.logo3 {
+    max-width: 60%;
+    min-width: 200px;
+    margin: 20px;
+}
+
+/* header Template 4 */
+/* ----------------------------------------------------------------------------------- */
+
+
+.tabs4 {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    position: sticky;
+    padding: 0;
+}
+
+/* The below three take up the top part of the screen, splitting into sections 
+
+.leftli and rightli take up 1/4 each and are positioned in their respective corners
+.centerli takes up the middle section of 2/4 and is centered (else would be more left*/
+.leftli4 {
+    flex-grow: 1;
+}
+
+.centerli4 {
+    display: flex;
+    justify-content: center;
+    flex-grow: 2;
+}
+
+.rightli4 {
+    display: flex;
+    justify-content: right;
+    flex-grow: 1;
+}
+
+.tabbutton4 {
+    background-color: rgb(67, 133, 187);
+    color: white;
+    border: none;
+    /* Remove border */
+    outline: none;
+    /* Remove outline */
+    font-size: 10px;
+    height: 60px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 20px 20px;
+    margin: 10px;
+    border-radius: 10px;
+
+}
+
+.left-side4 h1 {
+    font-size: 70px;
+    color: rgb(0, 0, 0);
+    padding: 0px 40px 0px 40px;
+}
+
+
+.left-side4 {
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.headerbuttons4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+}
+
+img.logo4 {
+    max-width: 60%;
+    min-width: 200px;
+    margin: 20px;
+}
+
+
+/* header Template 5 */
+
+
+/* header Template 6 */
+input {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    width: 400px;
+    height: 20px;
+}
+
+
+
+/* ----------------------------------------------------------------------------------- */
+
+
+
+/* header Template 12 */
+
+.image-container {
     position: relative;
-    z-index: 1;
 }
 
-.bg::after{
+.image-content {
+    position: absolute;
+    top: 50%;
+    /* Adjust these values to move the button */
+    left: 50%;
+    /* Adjust these values to move the button */
+    transform: translate(-50%, -50%);
+    /* This centers the button */
+}
+
+.image-content2 {
+    position: absolute;
+    top: 50%;
+    /* Adjust these values to move the button */
+    left: 50%;
+    /* Adjust these values to move the button */
+    transform: translate(-50%, -50%);
+    /* This centers the button */
+    color: #fff; /* Change text color to white */
+    background-color: rgba(0, 0, 0, 0.5); /* Add semi-transparent black background */
+}
+
+.image-content3 {
+    position: absolute;
+    top: 50%;
+    /* Adjust these values to move the button */
+    left: 50%;
+    /* Adjust these values to move the button */
+    transform: translate(-175%, 72%);
+    /* This centers the button */
+    color: #fff; /* Change text color to white */
+    background-color: rgba(0, 0, 0, 0.5); /* Add semi-transparent black background */
+}
+
+
+
+
+
+/* blog Template 1 */
+.blog-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px;
+
+}
+
+.blog-center {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 5px;
+
+}
+
+.blog-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.blog-left2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-height: 1000px;
+    padding: 20px;
     
 }
 
-.no-parallax{
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
-    background-color: #1a1822;
-    z-index: 999;
-    padding: 20px 20px 20px 20px;
+.blog-center2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-height: 1000px;
+
 }
 
+.blog-right2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-height: 1000px;
+    padding: 20px;
+}
+
+
+.blog-left3 {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px;
+
+}
+
+.label1 {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-bottom: 2px solid black;
+    padding: 5px;
+}
+
+.blogPhoto {
+    min-width: 400px;
+    max-width: 80%;
+    border: 2px solid black;
+}
+
+.blogPhoto2 {
+    min-width: 400px;
+    max-width: 1000px;
+}
+
+
+.boldtext {
+    border-left: 2px solid black;
+    padding: 20px;
+}
+
+.blog-content {
+    border-bottom: 2px solid black;
+    margin: 20px;
+
+}
+
+.blogtype {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 5px;
+    max-width: 70px;
+}
+
+.blogbutton {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* the below is the words coloring/style */
+.blogbutton a {
+    color: white;
+}
+
+
+/* Testimonial Template info */
+.testimPhoto {
+    min-width: 50px;
+    max-width: 100px;
+
+}
+
+/* General CSS attempt for formatting */
+.sec-piece {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+    border: 2px solid black;
+    width: 30%;
+    height: 300px;
+}
+
+.sec-piece2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.sec-piece3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+    border: 2px solid black;
+    width: 30%;
+    height: 200px;
+}
+
+.sec-piece4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+    padding: 30px;
+    width: 30%;
+    height: 200px;
+}
+
+.sec-piece5 {
+    display: flex;
+    justify-content: left;
+    align-items: top;
+    flex-direction: column;
+    margin: 10px;
+    border: 2px solid black;
+    width: 30%;
+    height: 300px;
+}
+
+.sec-piece6 {
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    flex-direction: column;
+    background-color:rgba(196, 197, 198, 0.7);
+    margin: 10px;
+    padding: 30px;
+    min-width: 30%;
+    max-width: 40%;
+    height: 600px;
+}
+
+.sec-piece7 {
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    flex-direction: column;
+    background-color:rgba(67, 133, 187, 0.7);
+    margin: 10px;
+    padding: 30px;
+    min-width: 30%;
+    max-width: 40%;
+    height: 600px;
+}
+
+.sec-piece8 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 90%;
+    margin: 10px;
+}
+
+.sec-piece9 {
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+    padding: 30px;
+    min-width: 30%;
+    max-width: 70%;
+    border-bottom: 2px solid black;
+}
+
+.sec-piece10 {
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+    padding: 30px;
+    min-width: 30%;
+    max-width: 40%;
+
+}
+
+.sec-piece11 {
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+    padding: 30px;
+}
+
+
+.sec-piececontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+
+.limiting-spacer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-width: 1200px;
+}
