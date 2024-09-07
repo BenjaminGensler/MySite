@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+
+<body>
+    <section>
+        <h2>Simple Projects</h2>
+        <p>Below are a few of the projects I have finished to show i'm well versed in the web development interactivite
+            space</p>
+    </section>
+
+
+    <section class = "header">
+        <h2>Calculator</h2>
+        <p>Below is a simple calculator I made using HTML, CSS, and JavaScript</p>
+
+        <input type="text" id="displayCalc" class="display" value="0"> 
+        <div class="intro">
+            <div class="sec-piece6">
+                <button>
+                    <p onclick = "addToDisplay('7')">7</p>
+                </button>
+                <button>
+                    <p onclick = "addToDisplay('4')">4</p>
+                </button>
+                <button>
+                    <p onclick = "addToDisplay('1')">1</p>
+                </button>
+                <button>
+                    <p onclick = "clearDisplay()">Clear</p>
+                </button>
+            </div>
+
+            <div class="sec-piece6">
+                <button>
+                    <p onclick = "addToDisplay('8')">8</p>
+                </button>
+                <button>
+                    <p onclick = "addToDisplay('5')">5</p>
+                </button>
+                <button>
+                    <p onclick = "addToDisplay('2')">2</p>
+                </button>
+                <button>
+                    <p onclick = "addToDisplay('0')">0</p>
+                </button>
+            </div>
+
+            <div class="sec-piece6">
+                <button>
+                    <p onclick = "addToDisplay('9')">9</p>
+                </button>
+                <button>
+                    <p onclick = "addToDisplay('6')">6</p>
+                </button>
+                <button>
+                    <p onclick = "addToDisplay('3')">3</p>
+                </button>
+                <button>
+                    <p class = "action" onclick = "equalFunc()">=</p>
+                </button>
+            </div>
+
+            <div class="sec-piece7">
+                <button>
+                    <p class = "action" onclick = "actionButton('division')">/</p>
+                </button>
+                <button>
+                    <p class = "action" onclick = "actionButton('multiplication')">*</p>
+                </button>
+                <button>
+                    <p class = "action" onclick = "actionButton('subtraction')">-</p>
+                </button>
+                <button>
+                    <p class = "action" onclick = "actionButton('addition')">+</p>
+                </button>
+            </div>
+            
+        </div>
+
+    </section>
+
+    <script src="calculator.js"></script>
+</body>
+
+</html>
