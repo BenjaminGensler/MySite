@@ -25,19 +25,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
     typeText();
 
-
-    // Image change effect
-    const profilePic = document.getElementById("profilePic");
-    const images = ["IVCC.png", "ISU Graduate.png", "rocketClub.png"];
-    let imgIndex = 0;
-
-    function changeImage() {
-        imgIndex++;
-        if (imgIndex >= images.length) {
-            imgIndex = 0;
-        }
-        profilePic.src = images[imgIndex];
-    }
-
-    setInterval(changeImage, 10000); // Change image every 3 seconds
 });
