@@ -26,3 +26,8 @@ document.addEventListener("DOMContentLoaded", function() {
     typeText();
 
 });
+
+
+
+
+
