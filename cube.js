@@ -1,6 +1,6 @@
 const canvas = document.getElementById('cubeCanvas');
 const ctx = canvas.getContext('2d');
-let orientation = 'front'; // can be 'front', 'top', 'bottom', 'left', 'right', no 'back'
+let cubeOrientation = 'front'; // can be 'front', 'top', 'bottom', 'left', 'right', no 'back'
 let moveInProgress = false;
 
 // Cube vertices
@@ -21,12 +21,12 @@ const faces = [
 
 // Face colors
 const faceColors = [
-    'rgba(255,0,0,0.7)',    // back - red
-    'rgba(0,255,0,0.7)',    // front - green
-    'rgba(0,0,255,0.7)',    // bottom - blue
-    'rgba(255,255,0,0.7)',  // top - yellow
-    'rgba(255,0,255,0.7)',  // right - magenta
-    'rgba(0,255,255,0.7)'   // left - cyan
+    'rgba(255,255,255,0.15)', // back
+    'rgba(255,255,255,0.20)', // front (slightly less transparent)
+    'rgba(200,220,255,0.13)', // bottom (cool tint)
+    'rgba(255,255,255,0.18)', // top
+    'rgba(220,240,255,0.14)', // right (cool tint)
+    'rgba(255,255,255,0.16)'  // left
 ];
 
 // Edges for outline
@@ -69,39 +69,39 @@ canvas.addEventListener('click', (e) => {
     const [centerX, centerY] = project(rotate([0, 0, 0], angleX, angleY));
 
     // Only allow move if on front face or returning to front
-    if (orientation === 'front') {
+    if (cubeOrientation === 'front') {
         if (Math.abs(mouseX - centerX) > Math.abs(mouseY - centerY)) {
             // Left or right
             if (mouseX < centerX) {
                 targetAngleY = angleY + Math.PI / 2;
-                orientation = 'left';
+                cubeOrientation = 'left';
             } else {
                 targetAngleY = angleY - Math.PI / 2;
-                orientation = 'right';
+                cubeOrientation = 'right';
             }
         } else {
             // Up or down
             if (mouseY < centerY) {
                 targetAngleX = angleX + Math.PI / 2;
-                orientation = 'top';
+                cubeOrientation = 'top';
             } else {
                 targetAngleX = angleX - Math.PI / 2;
-                orientation = 'bottom';
+                cubeOrientation = 'bottom';
             }
         }
         moveInProgress = true;
         animating = true;
     } else if (
         // Only allow returning to front
-        (orientation === 'left' && mouseX > centerX) ||
-        (orientation === 'right' && mouseX < centerX) ||
-        (orientation === 'top' && mouseY > centerY) ||
-        (orientation === 'bottom' && mouseY < centerY)
+        (cubeOrientation === 'left' && mouseX > centerX) ||
+        (cubeOrientation === 'right' && mouseX < centerX) ||
+        (cubeOrientation === 'top' && mouseY > centerY) ||
+        (cubeOrientation === 'bottom' && mouseY < centerY)
     ) {
         // Return to front
         targetAngleX = 0;
         targetAngleY = 0;
-        orientation = 'front';
+        cubeOrientation = 'front';
         moveInProgress = true;
         animating = true;
     }
@@ -134,6 +134,17 @@ function drawCube() {
         ctx.stroke();
     });
 
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(180,220,255,0.7)'; // light blue/white for glassy edge
+    edges.forEach(([a, b]) => {
+        const [x1, y1] = project(rotate(vertices[a], angleX, angleY));
+        const [x2, y2] = project(rotate(vertices[b], angleX, angleY));
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    });
+
     // Draw edges for clarity
     ctx.strokeStyle = 'black';
     edges.forEach(([startIdx, endIdx]) => {
@@ -146,8 +157,61 @@ function drawCube() {
     });
 }
 
+function drawHighlight() {
+    // Get front face center
+    const face = faces[1];
+    const points = face.map(i => project(rotate(vertices[i], angleX, angleY)));
+    // Calculate center
+    const cx = points.reduce((sum, p) => sum + p[0], 0) / 4;
+    const cy = points.reduce((sum, p) => sum + p[1], 0) / 4;
+    // Draw ellipse highlight
+    ctx.save();
+    ctx.globalAlpha = 0.18;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy - 10, 30, 12, Math.PI / 6, 0, 2 * Math.PI);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    ctx.restore();
+}
+
+// Crescent arc from 120° (2.094 rad) to 330° (5.759 rad)
+let oscAngle = 2.094; // Start at 120°
+let oscDirection = 1;
+const oscMin = 2.094; // 120°
+const oscMax = 5.759; // 330°
+const oscSpeed = 0.012; // Adjust for speed
+
+// When user rotates, update baseAngleX/baseAngleY instead of angleX/angleY
+function setTargetAngles(newX, newY) {
+    targetAngleX = newX;
+    targetAngleY = newY;
+}
+
 // In your animate function, after animating:
 function animate() {
+    time += 0.016; // ~60fps
+
+    // Animate user-driven rotation
+    const diffY = targetAngleY - baseAngleY;
+    const diffX = targetAngleX - baseAngleX;
+    if (Math.abs(diffY) > 0.01) {
+        baseAngleY += diffY * 0.2;
+    } else {
+        baseAngleY = targetAngleY;
+    }
+    if (Math.abs(diffX) > 0.01) {
+        baseAngleX += diffX * 0.2;
+    } else {
+        baseAngleX = targetAngleX;
+    }
+
+    // Crescent oscillation (few degrees, e.g., 0.1 rad ≈ 5.7°)
+    const oscX = Math.sin(time) * 0.08; // amplitude in radians
+    const oscY = Math.cos(time) * 0.05;
+
+    angleX = baseAngleX + oscX;
+    angleY = baseAngleY + oscY;
+    
     if (animating) {
         const diffY = targetAngleY - angleY;
         const diffX = targetAngleX - angleX;
