@@ -2,24 +2,15 @@ const canvas = document.getElementById('cubeCanvas');
 const ctx = canvas.getContext('2d');
 let cubeOrientation = 'front'; // can be 'front', 'top', 'bottom', 'left', 'right', no 'back'
 let moveInProgress = false;
+let baseAngleX = 0, baseAngleY = 0;
+let oscT = 0, oscDir = 1, oscSpeed = 0.003;
 
-// Cube vertices
+// 1. Define cube vertices (3D)
 const vertices = [
     [-50, -50, -50], [50, -50, -50], [50, 50, -50], [-50, 50, -50],
     [-50, -50, 50], [50, -50, 50], [50, 50, 50], [-50, 50, 50]
 ];
 
-// Cube faces (each face is 4 vertex indices)
-const faces = [
-    [0, 1, 2, 3], // back
-    [4, 5, 6, 7], // front
-    [0, 1, 5, 4], // bottom
-    [2, 3, 7, 6], // top
-    [1, 2, 6, 5], // right
-    [0, 3, 7, 4]  // left
-];
-
-// Face colors
 const faceColors = [
     'rgba(255,255,255,0.15)', // back
     'rgba(255,255,255,0.20)', // front (slightly less transparent)
@@ -29,7 +20,7 @@ const faceColors = [
     'rgba(255,255,255,0.16)'  // left
 ];
 
-// Edges for outline
+// 2. Define cube edges
 const edges = [
     [0, 1], [1, 2], [2, 3], [3, 0],
     [4, 5], [5, 6], [6, 7], [7, 4],
@@ -46,8 +37,9 @@ function rotate([x, y, z], angleX, angleY) {
     return [x1, y1, z2];
 }
 
+// Project 3D to 2D
 function project([x, y, z]) {
-    const scale = 300 / (z + 400);
+    const scale = 300 / (z + 400); // Perspective
     return [
         x * scale + canvas.width / 2,
         y * scale + canvas.height / 2
@@ -107,56 +99,6 @@ canvas.addEventListener('click', (e) => {
     }
 });
 
-function drawCube() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Rotate and project vertices
-    const rotated = vertices.map(v => rotate(v, angleX, angleY));
-    const projected = rotated.map(project);
-
-    // Draw faces (painter's algorithm: sort by average z)
-    const faceDepths = faces.map(face => {
-        const avgZ = face.reduce((sum, idx) => sum + rotated[idx][2], 0) / 4;
-        return { face, avgZ };
-    });
-    faceDepths.sort((a, b) => b.avgZ - a.avgZ); // draw farthest first
-
-    faceDepths.forEach(({ face }, i) => {
-        ctx.beginPath();
-        face.forEach((idx, j) => {
-            const [x, y] = projected[idx];
-            if (j === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        });
-        ctx.closePath();
-        ctx.fillStyle = faceColors[faces.indexOf(face)];
-        ctx.fill();
-        ctx.strokeStyle = 'black';
-        ctx.stroke();
-    });
-
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = 'rgba(180,220,255,0.7)'; // light blue/white for glassy edge
-    edges.forEach(([a, b]) => {
-        const [x1, y1] = project(rotate(vertices[a], angleX, angleY));
-        const [x2, y2] = project(rotate(vertices[b], angleX, angleY));
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-    });
-
-    // Draw edges for clarity
-    ctx.strokeStyle = 'black';
-    edges.forEach(([startIdx, endIdx]) => {
-        const start = projected[startIdx];
-        const end = projected[endIdx];
-        ctx.beginPath();
-        ctx.moveTo(start[0], start[1]);
-        ctx.lineTo(end[0], end[1]);
-        ctx.stroke();
-    });
-}
-
 function drawHighlight() {
     // Get front face center
     const face = faces[1];
@@ -179,7 +121,7 @@ let oscAngle = 2.094; // Start at 120°
 let oscDirection = 1;
 const oscMin = 2.094; // 120°
 const oscMax = 5.759; // 330°
-const oscSpeed = 0.012; // Adjust for speed
+oscSpeed = 0.012; // Adjust for speed
 
 // When user rotates, update baseAngleX/baseAngleY instead of angleX/angleY
 function setTargetAngles(newX, newY) {
@@ -187,91 +129,84 @@ function setTargetAngles(newX, newY) {
     targetAngleY = newY;
 }
 
-// In your animate function, after animating:
+function drawCube() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Rotate and project vertices
+    const projected = vertices.map(v => project(rotate(v, angleX, angleY)));
+    // Draw edges
+    ctx.strokeStyle = '#888';
+    edges.forEach(([startIdx, endIdx]) => {
+        const start = projected[startIdx];
+        const end = projected[endIdx];
+        ctx.beginPath();
+        ctx.moveTo(start[0], start[1]);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    });
+
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'black';
+    edges.forEach(([a, b]) => {
+        const [x1, y1] = project(rotate(vertices[a], angleX, angleY));
+        const [x2, y2] = project(rotate(vertices[b], angleX, angleY));
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    });
+
+    // // Draw circles at each vertex for a rounded effect:
+    // vertices.forEach((v) => {
+    //     const [x, y] = project(rotate(v, angleX, angleY));
+    //     ctx.beginPath();
+    //     ctx.arc(x, y, 7, 0, 2 * Math.PI);
+    //     ctx.fillStyle = 'black';
+    //     ctx.fill();
+    // });
+}
+
 function animate() {
-    time += 0.016; // ~60fps
-
     // Animate user-driven rotation
-    const diffY = targetAngleY - baseAngleY;
-    const diffX = targetAngleX - baseAngleX;
-    if (Math.abs(diffY) > 0.01) {
-        baseAngleY += diffY * 0.2;
-    } else {
-        baseAngleY = targetAngleY;
-    }
-    if (Math.abs(diffX) > 0.01) {
-        baseAngleX += diffX * 0.2;
-    } else {
-        baseAngleX = targetAngleX;
-    }
-
-    // Crescent oscillation (few degrees, e.g., 0.1 rad ≈ 5.7°)
-    const oscX = Math.sin(time) * 0.08; // amplitude in radians
-    const oscY = Math.cos(time) * 0.05;
-
-    angleX = baseAngleX + oscX;
-    angleY = baseAngleY + oscY;
-    
     if (animating) {
-        const diffY = targetAngleY - angleY;
-        const diffX = targetAngleX - angleX;
+        const diffY = targetAngleY - baseAngleY;
+        const diffX = targetAngleX - baseAngleX;
         if (Math.abs(diffY) > 0.01) {
-            angleY += diffY * 0.2;
+            baseAngleY += diffY * 0.2;
         } else {
-            angleY = targetAngleY;
+            baseAngleY = targetAngleY;
         }
         if (Math.abs(diffX) > 0.01) {
-            angleX += diffX * 0.2;
+            baseAngleX += diffX * 0.2;
         } else {
-            angleX = targetAngleX;
+            baseAngleX = targetAngleX;
         }
         if (Math.abs(diffY) <= 0.01 && Math.abs(diffX) <= 0.01) {
             animating = false;
             moveInProgress = false;
         }
     }
+
+    // Banana/crescent oscillation (from 4 o'clock to 8 o'clock)
+    oscT += oscSpeed * oscDir - 0.005;
+    if (oscT > 1) { oscT = 1; oscDir = -1; }
+    if (oscT < 0) { oscT = 0; oscDir = 1; }
+    // Arc: 4 o'clock (angleA) to 8 o'clock (angleB)
+    // Let's say: angleA = (Math.PI/2) + (Math.PI/6), angleB = (Math.PI/2) - (Math.PI/6)
+    // We'll use these as polar angles for a banana-shaped path
+    const angleA = Math.PI * 1.66; // ~8 o'clock
+    const angleB = Math.PI * 1.33; // ~4 o'clock
+    const oscRadius = 0.5; // ~1 degree in radians
+    // Interpolate along the arc
+    const oscAngle = angleA + (angleB - angleA) * oscT;
+    const oscX = Math.sin(oscAngle) * oscRadius;
+    const oscY = Math.cos(oscAngle) * oscRadius;
+
+    // Combine base angles and oscillation
+    angleX = baseAngleX + oscX;
+    angleY = baseAngleY + oscY;
+
     drawCube();
     requestAnimationFrame(animate);
 }
 
 animate();
-
-// import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js';
-// import { RoundedBoxGeometry } from './RoundedBoxGeometry.js';
-
-
-// // 1. Get the container div
-// const container = document.getElementById('cube-container');
-// const width = container.offsetWidth;
-// const height = container.offsetHeight;
-
-// // 2. Set up scene, camera, renderer
-// const scene = new THREE.Scene();
-// const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-// const renderer = new THREE.WebGLRenderer({ alpha: true });
-// renderer.setSize(width, height);
-// renderer.setClearColor(0x222222, 1);
-// container.appendChild(renderer.domElement);
-
-// // 3. Create rounded box geometry and material
-// const geometry = new THREE.RoundedBoxGeometry(1, 1, 1, 8, 0.15); // width, height, depth, segments, radius
-// const material = new THREE.MeshPhongMaterial({ color: 0x00aaff, opacity: 0.8, transparent: true });
-// const cube = new THREE.Mesh(geometry, material);
-// scene.add(cube);
-
-// // 4. Add light
-// const light = new THREE.DirectionalLight(0xffffff, 1);
-// light.position.set(5, 5, 5).normalize();
-// scene.add(light);
-
-// // 5. Position camera
-// camera.position.z = 3;
-
-// // 6. Animation loop
-// function animate() {
-//   requestAnimationFrame(animate);
-//   cube.rotation.x += 0.01;
-//   cube.rotation.y += 0.01;
-//   renderer.render(scene, camera);
-// }
-// animate();
