@@ -117,6 +117,35 @@ function drawHighlight() {
     ctx.restore();
 }
 
+function drawWordsOnFace(faceIndices, words) {
+    for (let i = 0; i < 4; i++) {
+        const idxA = faceIndices[i];
+        const idxB = faceIndices[(i + 1) % 4];
+        const vA = project(rotate(vertices[idxA], angleX, angleY));
+        const vB = project(rotate(vertices[idxB], angleX, angleY));
+        // Midpoint
+        const midX = (vA[0] + vB[0]) / 2;
+        const midY = (vA[1] + vB[1]) / 2;
+        // Angle
+        const angle = Math.atan2(vB[1] - vA[1], vB[0] - vA[0]);
+        ctx.save();
+        ctx.translate(midX, midY);
+
+        let wordAngle = angle;
+        if (words[i].toLowerCase() === "button") {
+            wordAngle += Math.PI;
+        }
+        ctx.rotate(wordAngle);
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = '18px sans-serif';
+        ctx.fillStyle = '#333';
+        ctx.fillText(words[i], 0, 20); // Offset from edge
+        ctx.restore();
+    }
+}
+
 // Crescent arc from 120° (2.094 rad) to 330° (5.759 rad)
 let oscAngle = 2.094; // Start at 120°
 let oscDirection = 1;
@@ -144,6 +173,10 @@ function drawCube() {
         ctx.lineTo(end[0], end[1]);
         ctx.stroke();
     });
+
+    const backFace = [0, 1, 2, 3];
+    const words = ['TOP', 'RIGHT', 'BOTTOM', 'LEFT'];
+    drawWordsOnFace(backFace, words);
 
     ctx.lineWidth = 4;
     ctx.strokeStyle = 'black';
