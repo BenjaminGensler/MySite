@@ -5,11 +5,12 @@ let moveInProgress = false;
 let baseAngleX = 0, baseAngleY = 0;
 let oscT = 0, oscDir = 1, oscSpeed = 0.003;
 
+const cubeSize = 3; // Increase for a bigger cube
 // 1. Define cube vertices (3D)
 const vertices = [
     [-50, -50, -50], [50, -50, -50], [50, 50, -50], [-50, 50, -50],
     [-50, -50, 50], [50, -50, 50], [50, 50, 50], [-50, 50, 50]
-];
+].map(v => v.map(coord => coord * cubeSize));
 
 const faceColors = [
     'rgba(255,255,255,0.15)', // back
@@ -121,7 +122,7 @@ let oscAngle = 2.094; // Start at 120°
 let oscDirection = 1;
 const oscMin = 2.094; // 120°
 const oscMax = 5.759; // 330°
-oscSpeed = 0.012; // Adjust for speed
+oscSpeed = 0.006; // Adjust for speed
 
 // When user rotates, update baseAngleX/baseAngleY instead of angleX/angleY
 function setTargetAngles(newX, newY) {
@@ -187,15 +188,15 @@ function animate() {
     }
 
     // Banana/crescent oscillation (from 4 o'clock to 8 o'clock)
-    oscT += oscSpeed * oscDir - 0.005;
+    oscT += oscSpeed * oscDir;
     if (oscT > 1) { oscT = 1; oscDir = -1; }
     if (oscT < 0) { oscT = 0; oscDir = 1; }
     // Arc: 4 o'clock (angleA) to 8 o'clock (angleB)
     // Let's say: angleA = (Math.PI/2) + (Math.PI/6), angleB = (Math.PI/2) - (Math.PI/6)
     // We'll use these as polar angles for a banana-shaped path
-    const angleA = Math.PI * 1.66; // ~8 o'clock
-    const angleB = Math.PI * 1.33; // ~4 o'clock
-    const oscRadius = 0.5; // ~1 degree in radians
+    const angleA = Math.PI * 1.99; // ~8 o'clock
+    const angleB = Math.PI * 1.11; // ~4 o'clock
+    const oscRadius = 0.1; // ~1 degree in radians
     // Interpolate along the arc
     const oscAngle = angleA + (angleB - angleA) * oscT;
     const oscX = Math.sin(oscAngle) * oscRadius;
