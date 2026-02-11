@@ -4,6 +4,7 @@ let cubeOrientation = 'front'; // can be 'front', 'top', 'bottom', 'left', 'righ
 let moveInProgress = false;
 let baseAngleX = 0, baseAngleY = 0;
 let oscT = 0, oscDir = 1, oscSpeed = 0.003;
+let currentFace = 'front';
 
 const cubeSize = 3; // Increase for a bigger cube
 // 1. Define cube vertices (3D)
@@ -68,18 +69,22 @@ canvas.addEventListener('click', (e) => {
             if (mouseX < centerX) {
                 targetAngleY = angleY + Math.PI / 2;
                 cubeOrientation = 'left';
+                currentFace = 'blog';
             } else {
                 targetAngleY = angleY - Math.PI / 2;
                 cubeOrientation = 'right';
+                currentFace = 'portfolio';
             }
         } else {
             // Up or down
             if (mouseY < centerY) {
                 targetAngleX = angleX + Math.PI / 2;
                 cubeOrientation = 'top';
+                currentFace = 'resume';
             } else {
                 targetAngleX = angleX - Math.PI / 2;
                 cubeOrientation = 'bottom';
+                currentFace = 'contact';
             }
         }
         moveInProgress = true;
@@ -95,6 +100,7 @@ canvas.addEventListener('click', (e) => {
         targetAngleX = 0;
         targetAngleY = 0;
         cubeOrientation = 'front';
+        currentFace = 'front';
         moveInProgress = true;
         animating = true;
     }
@@ -132,7 +138,7 @@ function drawWordsOnFace(faceIndices, words) {
         ctx.translate(midX, midY);
 
         let wordAngle = angle;
-        if (words[i].toLowerCase() === "button") {
+        if (words[i].toLowerCase() === "contact info") {
             wordAngle += Math.PI;
         }
         ctx.rotate(wordAngle);
@@ -141,7 +147,8 @@ function drawWordsOnFace(faceIndices, words) {
         ctx.textBaseline = 'middle';
         ctx.font = '18px sans-serif';
         ctx.fillStyle = '#333';
-        ctx.fillText(words[i], 0, 20); // Offset from edge
+        const offset = (words[i].toLowerCase() === "contact info") ? -20 : 20;
+        ctx.fillText(words[i], 0, offset);
         ctx.restore();
     }
 }
@@ -151,7 +158,7 @@ let oscAngle = 2.094; // Start at 120°
 let oscDirection = 1;
 const oscMin = 2.094; // 120°
 const oscMax = 5.759; // 330°
-oscSpeed = 0.006; // Adjust for speed
+oscSpeed = 0.005; // Adjust for speed
 
 // When user rotates, update baseAngleX/baseAngleY instead of angleX/angleY
 function setTargetAngles(newX, newY) {
@@ -174,9 +181,40 @@ function drawCube() {
         ctx.stroke();
     });
 
-    const backFace = [0, 1, 2, 3];
-    const words = ['TOP', 'RIGHT', 'BOTTOM', 'LEFT'];
-    drawWordsOnFace(backFace, words);
+    const frontFace = [0, 1, 2, 3];
+    // const backFace = [4,5,6,7];
+
+    if (currentFace === 'front') {
+        const words = ['RESUME', 'PORTFOLIO', 'CONTACT INFO', 'BLOG'];
+        drawWordsOnFace(frontFace, words);
+    } else if (currentFace === 'contact') {
+        // Example contact info
+        const contactLines = [
+            'John Doe',
+            'john.doe@email.com',
+            '(555) 123-4567',
+            'linkedin.com/in/johndoe',
+            'github.com/johndoe'
+        ];
+        // Find center of the front face
+        const faceIndices = frontFace;
+        const center = faceIndices.reduce(
+            (acc, idx) => {
+                const [x, y] = project(rotate(vertices[idx], angleX, angleY));
+                return [acc[0] + x / 4, acc[1] + y / 4];
+            },
+            [0, 0]
+        );
+        ctx.save();
+        ctx.font = '18px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#333';
+        contactLines.forEach((line, i) => {
+            ctx.fillText(line, center[0], center[1] - 40 + i * 24);
+        });
+        ctx.restore();
+    }
 
     ctx.lineWidth = 4;
     ctx.strokeStyle = 'black';
